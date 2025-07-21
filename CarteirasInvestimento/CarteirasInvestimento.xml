@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CarteirasInvestimento</name>
+    </assembly>
+    <members>
+        <member name="T:CarteirasInvestimento.Controllers.AtivosController">
+            <summary>
+              Controller responsável por gerenciar as operações do  Investimento para a entidade Carteira.  
+            </summary>
+        </member>
+        <member name="M:CarteirasInvestimento.Controllers.AtivosController.GetAll">
+            <summary>
+            Obtém uma lista de todas as carteiras cadastradas.
+            </summary>  
+        </member>
+        <member name="T:CarteirasInvestimento.Controllers.CarteirasController">
+            <summary>
+              Controller responsável por gerenciar as operações da Carteira de Investimento para a entidade Carteira.  
+            </summary>
+        </member>
+        <member name="M:CarteirasInvestimento.Controllers.CarteirasController.Get(System.Int32)">
+            <summary>
+            Obtém uma carteira cadastradas por id do cliente.
+            </summary>
+        </member>
+        <member name="M:CarteirasInvestimento.Controllers.CarteirasController.GetAll">
+            <summary>
+            Obtém uma lista de todas as carteiras cadastradas.
+            </summary>     
+        </member>
+        <member name="M:CarteirasInvestimento.Controllers.CarteirasController.Post(CarteirasInvestimento.AppServer.CarteiraCadastroView)">
+            <summary>
+            Cadastra uma carteiras.
+            </summary> 
+        </member>
+    </members>
+</doc>
