@@ -1,7 +1,9 @@
 ﻿using CarteirasInvestimento.AppServer.Configuration;
+using CarteirasInvestimento.DataAcess.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace CarteirasInvestimento.Configuration
@@ -23,6 +25,10 @@ namespace CarteirasInvestimento.Configuration
             services.AddControllersWithViews();
 
             Bootstrap.AddServices(services, Configuration);
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddDbContext<Context>(option => option.UseSqlite(Configuration.GetConnectionString("CarteiraInvestimentoSqlite")));
+            //services.AddDbContext<Context>(option => option.UseSqlServer(Configuration.GetConnectionString("CarteiraInvestimentoSqlServer")));
 
             services.AddVersionedApiExplorer(options =>
             {

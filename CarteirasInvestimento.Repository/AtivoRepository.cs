@@ -1,41 +1,46 @@
-﻿using CarteirasInvestimento.DataAcess.Entity;
+﻿using CarteirasInvestimento.DataAcess.Configuration;
+using CarteirasInvestimento.DataAcess.Entity;
 using CarteirasInvestimento.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarteirasInvestimento.Repository
 {
     public class AtivoRepository : IAtivoRepository
     {
-        public AtivoRepository(){}
+        private readonly Context _context;
+        public AtivoRepository(Context context) {
+            _context = context;
+        }
         public async Task<IEnumerable<Ativo>> GetAllAsync()
         {
-
-            var listaAtivos = AtivoFactory.DeserializeListaAtivo(FilePath());
-            return await Task.Run(() => { return listaAtivos.ToList(); });
+            return await _context.Ativos.Include(x => x.Carteiras)
+                .ThenInclude(x => x.Cliente)
+                .ToListAsync();
         }
 
-        public async Task AddAsync(List<Ativo> listaAtivo)
+        public async Task AddAtivoAsync(Ativo ativo)
         {
-            await Task.Run(async () =>
-            {
+            await _context.Ativos.AddAsync(ativo);
+            await _context.SaveChangesAsync();
 
-                var listaAtivoCadastrada = await GetAllAsync();
-                listaAtivo.AddRange(listaAtivoCadastrada);
-               
-                var ativoJson = AtivoFactory.SerializeAtivo(listaAtivo);
-                string json = File.ReadAllText(FilePath());
-                File.WriteAllText(FilePath(), ativoJson);
-
-            });
         }
-
-        public async Task<IEnumerable<Ativo>> GetByClienteIdAsync(int id)
+        public async Task UpdateAtivoAsync(Ativo ativo)
         {
-            var listaAtivoByCliente = AtivoFactory.DeserializeListaAtivo(FilePath());
-            return await Task.Run(() => { return listaAtivoByCliente.Where(x => x.Carteira.ClienteId == id).ToList(); });
+             _context.Ativos.Update(ativo);
+            await _context.SaveChangesAsync();
         }
-        private string FilePath()
+        public async Task DeleteAtivoAsync(Ativo ativo)
         {
-            return Path.GetFullPath("Dados\\ativos.json");
+             _context.Ativos.Remove(ativo);
+            await _context.SaveChangesAsync();  
+        }
+        public async Task<Ativo> GetByClienteIdAsync(int id)
+        {
+            return  await _context.Ativos.FindAsync(id);
+        }
+        public async Task<Ativo> GetByIdAsync(int id)
+        {
+            return await _context.Ativos.FindAsync(id);
         }
     }
 }

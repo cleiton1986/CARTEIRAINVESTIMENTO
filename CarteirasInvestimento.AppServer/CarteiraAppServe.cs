@@ -1,4 +1,5 @@
-﻿using CarteirasInvestimento.AppServer.Interfaces;
+﻿using AutoMapper;
+using CarteirasInvestimento.AppServer.Interfaces;
 using CarteirasInvestimento.DataAcess.Entity;
 using CarteirasInvestimento.Infra;
 using CarteirasInvestimento.Repository;
@@ -10,12 +11,15 @@ namespace CarteirasInvestimento.AppServer
     {
         private readonly ICarteiraRepository _carteiraRepository;
         private readonly IAtivoRepository    _ativoRepository;
+        private readonly IMapper _mapper;
         public CarteiraAppServe(ICarteiraRepository carteiraRepository,
-                                IAtivoRepository ativoRepository
+                                IAtivoRepository ativoRepository,
+                                IMapper mapper
             )
         {
             _carteiraRepository = carteiraRepository;
             _ativoRepository = ativoRepository;
+            _mapper = mapper;
         }
 
         public async Task<CarteiraView> GetByClienteIdAsync(int id)
@@ -24,23 +28,25 @@ namespace CarteirasInvestimento.AppServer
         
             try
             {
-                var listaCarteira = await _carteiraRepository.GetByCarteirasIdAsync(id);
-                var listaAtivos = await _ativoRepository.GetByClienteIdAsync(id);
-     
-                if (listaCarteira.Any())
-                {
-                    listaCarteira.ToList().ForEach(c =>
-                    {
-                        carteiraView.Ativos.AddRange(c.Ativos.Select(at => new AtivoCarteiraView
-                        {
-                            Quantidade = at.Quantidade,
-                            Codigo = at.Codigo
-                        }).ToList());
+                var carteira = await _carteiraRepository.GetByCarteirasIdAsync(id);
+                var ativos = await _ativoRepository.GetByClienteIdAsync(id);
 
-                        carteiraView.ClienteId = c.ClienteId;
-                        carteiraView.ValorToal = Convert.ToDecimal(listaAtivos.Where(a => a.Id == c.AtivoId).Sum(at => at.PrecoUnitario * at.Quantidade));
-                    });
+                if (carteira == null)
+                {
+                    Notification.Notify($"Carteira não encontrada para o Cliente com Id: {id}", "GetByClienteIdAsync");
+                    return carteiraView;
                 }
+
+                carteiraView = _mapper.Map<CarteiraView>(carteira);
+
+                //carteiraView.Ativos.AddRange(c.Ativos.Select(at => new AtivoCarteiraView
+                //{
+                //    Quantidade = at.Quantidade,
+                //    Codigo = at.Codigo
+                //}).ToList());
+
+               // carteiraView.ClienteId = carteira.ClienteId;
+               // carteiraView.ValorToal = Convert.ToDecimal(ativos.Where(a => a.Id == c.AtivoId).Sum(at => at.PrecoUnitario * at.Quantidade));
             }
             catch (Exception ex)
             {
@@ -54,28 +60,12 @@ namespace CarteirasInvestimento.AppServer
         {
             try
             {
-                var carteira = new Carteira
+
+                var carteira = _mapper.Map<Carteira>(view);
+
+                if (carteira.Ativos.Any(a => a.Validate()))
                 {
-                    ClienteId = view.ClienteId,
-                    AtivoId = Convert.ToInt32(Extensions.GetNumero()),
-                    Ativos = view.Ativos.Select(a => new Ativo
-                    {
-                        Quantidade = a.Quantidade,
-                        Codigo = a.Codigo
-
-                    }).ToList()
-                };
-
-
-                if (carteira.Validate() && carteira.Ativos.Any(a => a.Validate()))
-                {
-                    if (!await _carteiraRepository.ExistsRecordsByAsync())
-                    {
-                        await _carteiraRepository.AddAsync(carteira);
-                        await AddAtivo(carteira);
-                    }  
-                    else
-                        await UpdateAsync(carteira);
+                    await _carteiraRepository.AddAsync(carteira);
                 }
             }
             catch (Exception ex)
@@ -83,18 +73,28 @@ namespace CarteirasInvestimento.AppServer
                 Notification.Notify($"Erro ao criar carteira. : {ex.Message} ", "AddAsync");
             }
         }
-        private async Task UpdateAsync(Carteira carteira)
+        public async Task UpdateAsync(CarteiraCadastroView view)
         {
             try
             {
-                var listaCarteira = await _carteiraRepository.GetAllAsync();
-                var listaCarteiraUpdate = listaCarteira.ToList();
-                if (listaCarteiraUpdate.Count > 0)
-                {
-                    listaCarteiraUpdate.Add(carteira);
-                    await _carteiraRepository.UpdateAsync(listaCarteiraUpdate);
-                    await AddAtivo(carteira);
-                }
+
+
+
+                //if (carteira.Validate() && carteira.Ativos.Any(a => a.Validate()))
+                //{
+                //    if (!await _carteiraRepository.ExistsRecordsByAsync())
+                //    {
+
+                //        await _carteiraRepository.UpdateAsync(carteira);
+                //    }
+                //}
+
+                //var listaCarteira = await _carteiraRepository.GetByCarteiraIdAsync(carteira.Id);
+                //if (listaCarteiraUpdate.Count > 0)
+                //{
+                //    listaCarteiraUpdate.Add(carteira);
+                //    await _carteiraRepository.UpdateAsync(carteira);
+                //}
             }
             catch (Exception ex)
             {
@@ -110,32 +110,18 @@ namespace CarteirasInvestimento.AppServer
             return listaCarteira.Select(c => new CarteiraView
             {
                 ClienteId = c.ClienteId,
-                Ativos = c.Ativos.Select(a => new AtivoCarteiraView
-                {
-                    Quantidade = a.Quantidade,
-                    Codigo = a.Codigo
-                }).ToList()
+                //Ativos = c.Ativos.Select(a => new AtivoCarteiraView
+                //{
+                //    Quantidade = a.Quantidade,
+                //    Codigo = a.Codigo
+                //}).ToList()
             }).ToList();
         }
 
-        private async Task AddAtivo(Carteira carteira)
+        public async Task DeleteAsync(CarteiraCadastroView view)
         {
-  
-            var _carteira = carteira;
-
-            carteira.Ativos.Select((a) => 
-            {
-                a.PrecoUnitario = Convert.ToDecimal(Extensions.GetNumero());
-                a.Id = carteira.AtivoId;
-                a.CarteiraId = Convert.ToInt32(Extensions.GetNumero());
-                a.Carteira = new Carteira { ClienteId = _carteira .ClienteId, AtivoId = carteira.AtivoId};
-                a.Nome = "CDBXP";
-                a.Tipo = TipoEnum.CDB;
-
-                return a;
-           }).ToList();
-
-            await _ativoRepository.AddAsync(carteira.Ativos.ToList());
+            var listaCarteira = await _carteiraRepository.GetByCarteiraIdAsync(view.ClienteId);
+            await _carteiraRepository.DeletarAsync(listaCarteira);
         }
     }
 }

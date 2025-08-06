@@ -9,7 +9,6 @@ namespace CarteirasInvestimento.Controllers
     ///   Controller responsável por gerenciar as operações da Carteira de Investimento para a entidade Carteira.  
     /// </summary>
 
-
     [Route("api/[controller]")]
     [ApiController]
     public class CarteirasController :  ControllerBase
@@ -52,11 +51,17 @@ namespace CarteirasInvestimento.Controllers
         /// <summary>
         /// Cadastra uma carteiras.
         /// </summary> 
+        /// <remarks>Inseri carteira de cliente no banco</remarks>
+        /// <param name="cadastroCarteiraView">Dados da carteira a ser cadastrada.</param>
+        ///  <response code="200">Carteira cadastrada com sucesso</response>
+        ///  <response code="400">Retorna erros de validação</response>
+        [ProducesResponseType(typeof(ProblemDetails),StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] CarteiraCadastroView view)
+        public async Task<ActionResult> Post([FromBody] CarteiraCadastroView cadastroCarteiraView)
         {
        
-            await _carteiraAppServe.AddAsync(view);
+            await _carteiraAppServe.AddAsync(cadastroCarteiraView);
             if (!Notification.IsValid())
                 return BadRequest(Notification.GetErrors());
 

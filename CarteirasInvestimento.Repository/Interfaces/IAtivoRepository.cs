@@ -5,8 +5,11 @@ namespace CarteirasInvestimento.Repository.Interfaces
     public interface IAtivoRepository
     {
         Task<IEnumerable<Ativo>> GetAllAsync();
-        Task<IEnumerable<Ativo>> GetByClienteIdAsync(int id);
-        Task AddAsync(List<Ativo> listaAtivo);
-
+        Task<Ativo> GetByClienteIdAsync(int id);
+        Task AddAtivoAsync(Ativo ativo);
+        Task UpdateAtivoAsync(Ativo ativo);
+        Task DeleteAtivoAsync(Ativo ativo);
+        Task<Ativo> GetByIdAsync(int id);
     }
 }
+

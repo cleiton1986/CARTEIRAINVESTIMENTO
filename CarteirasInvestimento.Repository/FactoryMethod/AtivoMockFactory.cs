@@ -15,14 +15,14 @@ namespace CarteirasInvestimento.Repository
                     Tipo = TipoEnum.ACAO,
                     Quantidade = 20,
                     PrecoUnitario = 18.20m,
-                    CarteiraId = 123,
+                   // CarteiraId = 123,
                     Codigo = "XPBR31",
-                    Carteira = new Carteira
-                    {
-                        Id = 2,
-                        ClienteId = 123,
+                    //Carteira = new Carteira
+                    //{
+                    //    Id = 2,
+                    //    ClienteId = 123,
                         
-                    }
+                    //}
                 },
                 new Ativo
                 {
@@ -32,12 +32,12 @@ namespace CarteirasInvestimento.Repository
                     Quantidade = 10,
                     Codigo = "XPBR31",
                     PrecoUnitario = 150.00m,
-                    CarteiraId = 123,
-                    Carteira = new Carteira
-                    {
-                        Id = 3,
-                        ClienteId = 123
-                    }
+                    //CarteiraId = 123,
+                    //Carteira = new Carteira
+                    //{
+                    //    Id = 3,
+                    //    ClienteId = 123
+                    //}
                 },
                 new Ativo
                 {
@@ -47,12 +47,12 @@ namespace CarteirasInvestimento.Repository
                     Quantidade = 30,
                     Codigo = "FFIX36",
                     PrecoUnitario = 32.80m,
-                    CarteiraId = 123,
-                    Carteira = new Carteira
-                    {
-                        Id = 2,
-                        ClienteId = 123
-                    }
+                    //CarteiraId = 123,
+                    //Carteira = new Carteira
+                    //{
+                    //    Id = 2,
+                    //    ClienteId = 123
+                    //}
                 },
             };
         }

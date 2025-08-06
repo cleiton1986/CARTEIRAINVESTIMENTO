@@ -9,6 +9,48 @@
               Controller responsável por gerenciar as operações do  Investimento para a entidade Carteira.  
             </summary>
         </member>
+        <member name="M:CarteirasInvestimento.Controllers.AtivosController.Get">
+            <summary>
+            Obtém um ativo cadastrado
+            </summary>
+            <returns>Retorna todos Ativos</returns>
+        </member>
+        <member name="M:CarteirasInvestimento.Controllers.AtivosController.Get(System.Int32)">
+            <summary>
+            Obtém um ativo cadastrado por id.
+            </summary>
+            <returns>Retorna ativo por Id</returns>
+            <param name="id">Id, paramentro de busca do ativo</param>
+        </member>
+        <member name="M:CarteirasInvestimento.Controllers.AtivosController.Post(CarteirasInvestimento.AppServer.AtivoView)">
+            <summary>
+            Cadastra um ativo.
+            </summary>
+            <param name="ativoView"></param>
+            <returns>Cliente cadastrado com sucesso!</returns>
+            <response code="400">Retorna erros de validação</response>
+            <response code="200">Cliente cadastrado com sucesso!</response>
+            <param name="ativoView">Dados do cliente a ser cadastro</param>
+        </member>
+        <member name="M:CarteirasInvestimento.Controllers.AtivosController.Put(CarteirasInvestimento.AppServer.AtivoView)">
+            <summary>
+            Atualizar um ativo.
+            </summary>
+            <param name="ativoView"></param>
+            <returns>Ativo atualizado com sucesso!</returns>
+            <response code="400">Retorna erros de validação</response>
+            <response code="200">Ativo atualizado com sucesso!</response>
+            <param name="ativoView">Dados do cliente a ser atualizado</param>
+        </member>
+        <member name="M:CarteirasInvestimento.Controllers.AtivosController.Delete(System.Int32)">
+            <summary>
+            Deleta um ativo cadastrado
+            </summary>
+            <returns></returns>
+            <response code="200">Ativo deletado com sucesso!</response>
+            <response code="400">Erro ao deletar o ativo</response>
+            <param name="id">Id, paramentro de busca para deletar ativo</param>
+        </member>
         <member name="M:CarteirasInvestimento.Controllers.AtivosController.GetAll">
             <summary>
             Obtém uma lista de todas as carteiras cadastradas.
@@ -33,6 +75,57 @@
             <summary>
             Cadastra uma carteiras.
             </summary> 
+            <remarks>Inseri carteira de cliente no banco</remarks>
+            <param name="cadastroCarteiraView">Dados da carteira a ser cadastrada.</param>
+             <response code="200">Carteira cadastrada com sucesso</response>
+             <response code="400">Retorna erros de validação</response>
+        </member>
+        <member name="T:CarteirasInvestimento.Controllers.ClienteController">
+            <summary>
+            Cantroller responsável por gerenciar as operações do Cliente.
+            </summary>
+        </member>
+        <member name="M:CarteirasInvestimento.Controllers.ClienteController.Get">
+            <summary>
+            Obtém um cliente cadastrado
+            </summary>
+            <returns>Retorna todos clientes</returns>
+        </member>
+        <member name="M:CarteirasInvestimento.Controllers.ClienteController.Get(System.Int32)">
+            <summary>
+            Obtém um cliente cadastrado por id.
+            </summary>
+            <returns>Retorna cliente por Id</returns>
+            <param name="id">Id, paramentro de busca do cliente</param>
+        </member>
+        <member name="M:CarteirasInvestimento.Controllers.ClienteController.Post(CarteirasInvestimento.AppServer.ClienteCadastroView)">
+            <summary>
+            Cadastra um cliente.
+            </summary>
+            <param name="clienteView"></param>
+            <returns>Cliente cadastrado com sucesso!</returns>
+            <response code="400">Retorna erros de validação</response>
+            <response code="200">Cliente cadastrado com sucesso!</response>
+            <param name="clienteView">Dados do cliente a ser cadastro</param>
+        </member>
+        <member name="M:CarteirasInvestimento.Controllers.ClienteController.Put(CarteirasInvestimento.AppServer.ClienteEditarView)">
+            <summary>
+            Atualizar um cliente.
+            </summary>
+            <param name="clienteView"></param>
+            <returns>Cliente atualizado com sucesso!</returns>
+            <response code="400">Retorna erros de validação</response>
+            <response code="200">Cliente atualizado com sucesso!</response>
+            <param name="clienteView">Dados do cliente a ser atualizado</param>
+        </member>
+        <member name="M:CarteirasInvestimento.Controllers.ClienteController.Delete(System.Int32)">
+            <summary>
+            Obtém um cliente cadastrado
+            </summary>
+            <returns>Retorna todos clientes</returns>
+            <response code="200">Cliente deletado com sucesso!</response>
+            <response code="400">Erro ao deletar o cliente</response>
+            <param name="id">Id, paramentro de busca para deletar cliente</param>
         </member>
     </members>
 </doc>

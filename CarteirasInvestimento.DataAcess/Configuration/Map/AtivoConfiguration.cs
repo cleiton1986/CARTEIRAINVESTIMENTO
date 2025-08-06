@@ -36,12 +36,8 @@ namespace CarteirasInvestimento.DataAcess.Configuration
             builder.Property(a => a.PrecoUnitario)
                    .HasColumnName("PrecoUnitario")
                    .HasColumnType("DECIMAL")
-                   .IsRequired();
+                   .IsRequired();   
 
-            builder.HasOne(c => c.Carteira)
-                   .WithMany(c => c.Ativos)
-                   .HasForeignKey(a => a.CarteiraId)
-                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

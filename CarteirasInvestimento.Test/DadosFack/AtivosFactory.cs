@@ -2,7 +2,7 @@
 
 namespace CarteirasInvestimento.Test
 {
-    public class AtivosFack
+    public class AtivosFactory
     {
         public static List<Ativo> DadosListaAtivos()
         {

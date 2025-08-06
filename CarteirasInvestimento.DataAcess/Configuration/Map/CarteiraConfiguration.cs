@@ -22,6 +22,16 @@ namespace CarteirasInvestimento.DataAcess.Configuration
                     .HasColumnType("INT")
                     .IsRequired();
 
+            builder.Property(c => c.DataCadastro)
+               .HasColumnName("DataCadastro")
+               .HasColumnType("DATETIME")
+               .IsRequired();
+
+
+           builder.HasOne(c => c.Cliente)
+                   .WithMany(c => c.Carteiras)
+                   .HasForeignKey(c => c.ClienteId)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 

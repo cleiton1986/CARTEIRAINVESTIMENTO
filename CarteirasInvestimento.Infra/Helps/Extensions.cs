@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel;
+using System.Globalization;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace CarteirasInvestimento.Infra
 {
     public static class Extensions
     {
-        public static string GetDescription(this Enum value)
+        public static string EnumDescription(this Enum value)
         {
             FieldInfo fi = value.GetType().GetField(value.ToString());
 
@@ -20,13 +22,36 @@ namespace CarteirasInvestimento.Infra
             else
                 return value.ToString();
         }
-
+        public static int EnumToInt(this Enum value)
+        {
+            int intValue = (int)Convert.ChangeType(value, value.GetTypeCode());
+            return intValue;
+        }
         public static bool ValidateString(this string value, string mensagem)
         {
-            var validate = value.Equals("string") || string.IsNullOrWhiteSpace(value);
-            if (validate)
+            var validate = false;
+
+            if (string.IsNullOrWhiteSpace(value) || value.Equals("string"))
             {
                 Notification.NotifyList(mensagem);
+                validate = true;
+            }
+
+         
+            return validate;
+        }
+        public static bool ValidateCep(this string cep, string mensagem)
+        {
+            var validate = false;
+            if (!string.IsNullOrWhiteSpace(cep))
+            {
+                string pattern = @"^\d{5}-\d{3}$";
+                validate = Regex.IsMatch(cep, pattern);
+ 
+                if (!validate)
+                {
+                    Notification.NotifyList(mensagem);
+                }
             }
             return validate;
         }
@@ -56,6 +81,58 @@ namespace CarteirasInvestimento.Infra
    
             int c = a.Next(100, 999);
             return c;
+        }
+        public static bool ValidateEmail(this string value, string mensagem)
+        {
+            var validate = false;
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+                Regex regex = new Regex(pattern);
+
+                validate = regex.IsMatch(value);
+
+                if (!validate)
+                {
+                    Notification.NotifyList(mensagem);
+                }
+            }
+            return validate;
+        }
+
+        public static bool ValidateDate(this DateTime? value, string mensagem)
+        {
+            var validate = false;
+
+            if (!value.HasValue)
+                return validate;
+
+            string dataString = value.Value.ToString("dd/MM/yyyy");
+            string formato = "dd/MM/yyyy";
+            DateTime dataValida;
+
+            if (DateTime.TryParseExact(dataString, formato, CultureInfo.InvariantCulture, DateTimeStyles.None, out dataValida))
+            {
+                validate = true;
+            }
+
+            return validate;
+        }
+
+        public static string ConvertDateToString(this DateTime value)
+        {
+            return value.ToString("dd/MM/yyyy");
+        }
+        public static DateTime ConvertStringToDate(this string value)
+        {
+            DateTime data;
+
+            if (DateTime.TryParse(value, out data))
+            {
+                return data;
+            }
+
+            return data;
         }
     }
 }

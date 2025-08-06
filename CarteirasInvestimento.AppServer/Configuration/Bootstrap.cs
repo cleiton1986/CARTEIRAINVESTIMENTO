@@ -17,14 +17,23 @@ namespace CarteirasInvestimento.AppServer.Configuration
 
             services.AddSingleton<IConfiguration>(configure);
 
+            AddRepository(services);
+            AddAppServe(services);
+        }
+
+        public static void AddRepository(IServiceCollection services) 
+        {
             services.AddScoped<IAtivoRepository, AtivoRepository>();
             services.AddScoped<ICarteiraRepository, CarteiraRepository>();
-           
+            services.AddScoped<IClienteRepository, ClienteRepository>();
+           // services.AddScoped<IRepository, Repository>();
+        }
 
+        public static void AddAppServe(IServiceCollection services)
+        {
             services.AddScoped<IAtivoAppServe, AtivoAppServe>();
             services.AddScoped<ICarteiraAppServe, CarteiraAppServe>();
-           
-
+            services.AddScoped<IClienteAppServe, ClienteAppServe>();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using CarteirasInvestimento.Infra;
-
-namespace CarteirasInvestimento.DataAcess.Entity
+﻿namespace CarteirasInvestimento.DataAcess.Entity
 {
     public class Carteira
     {
@@ -11,13 +9,13 @@ namespace CarteirasInvestimento.DataAcess.Entity
         public int Id { get; set; }
         public int AtivoId { get; set; }
         public int ClienteId { get; set; }
-        public IEnumerable<Ativo> Ativos { get; set; }
-
-        public bool Validate()
+        public ICollection<Ativo> Ativos { get; set; }
+        public Cliente Cliente { get; set; }
+        public DateTime DataCadastro
         {
-            Extensions.ValidateInt(this.ClienteId, "ClienteId deve ser maior que zero.");
-            return Notification.IsValid();
+            get { return DateTime.Now; } private set;
         }
+      
 
     }
 }

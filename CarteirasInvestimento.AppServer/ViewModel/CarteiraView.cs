@@ -2,8 +2,11 @@
 {
     public class CarteiraView
     {
+        public int Id { get; set; }
         public int ClienteId { get; set; }
         public decimal ValorToal { get; set; }
-        public List<AtivoCarteiraView> Ativos { get; set; } = new List<AtivoCarteiraView>();
+        public int AtivoId { get; set; }
+
+        public List<AtivoView> Ativos { get; set; } = new List<AtivoView>();
     }
 }

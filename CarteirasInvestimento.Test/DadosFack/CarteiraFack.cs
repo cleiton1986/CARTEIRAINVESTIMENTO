@@ -23,7 +23,6 @@ namespace CarteirasInvestimento.Test
                             Tipo = TipoEnum.ACAO,
                             Quantidade = 10,
                             PrecoUnitario = 18.20m,
-                            CarteiraId = 1,
                             Codigo = "XPBR3e"
                         }
                     },
@@ -42,7 +41,6 @@ namespace CarteirasInvestimento.Test
                             Tipo = TipoEnum.FII,
                             Quantidade = 15,
                             PrecoUnitario = 12.50m,
-                            CarteiraId = 2,
                             Codigo = "FII03"
                         }
                     },
@@ -66,7 +64,6 @@ namespace CarteirasInvestimento.Test
                         Tipo = TipoEnum.ACAO,
                         Quantidade = 10,
                         PrecoUnitario = 18.20m,
-                        CarteiraId = 1,
                         Codigo = "XPBR3e"
                     }
                 },
